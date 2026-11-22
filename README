@@ -1,0 +1,5 @@
+Am implementat un protocol de transfer fiabil peste UDP. Pe scurt, clientul deschide conexiunea, imparte fisierul in segmente mici si le trimite pe rand, iar serverul le primeste, le confirma si le pune inapoi in ordinea corecta. Pentru partea de client am folosit functiile 'init_sender', 'setup_connection' si 'send_data', iar pe server 'init_receiver', 'wait4connect' si 'recv_data'.
+
+Ideea principala a fost sa fac transferul stabil chiar daca UDP nu promite nici ordinea, nici livrarea pachetelor. Fiecare segment este tratat separat, iar serverul tine evidenta lor pana cand poate reconstrui fisierul complet. Daca un pachet se pierde sau ajunge mai tarziu, protocolul il recupereaza prin retransmisie si nu strica rezultatul final.
+
+Ca mecanism, totul merge pe handshake, ACK-uri si retransmisie la timeout. Am pastrat si pachetele venite in afara ordinii, ca sa le pot reasambla corect la final, iar serverul poate lucra si cu mai multi clienti in paralel. Asa am ajuns la un transfer simplu de urmarit, dar suficient de robust pentru tema.
